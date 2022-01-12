@@ -1,8 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:a_la_vez/screens/login_page.dart';
+import 'package:a_la_vez/screens/main_page.dart';
+import 'package:a_la_vez/utils/util.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-void main() async {
-  bool data = await fetchData();
-
+void main() {
   runApp(const MyApp());
 }
 
@@ -11,33 +14,64 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Home(),
+    return const MaterialApp(
+      home: SplashPage(),
     );
   }
 }
 
-Future<bool> fetchData() async {
-  bool data = false;
+class SplashPage extends StatefulWidget {
+  const SplashPage({Key? key}) : super(key: key);
 
-  await Future.delayed(Duration(seconds: 3), () {
-    data = true;
-  });
-
-  return data;
+  @override
+  _SplashPageState createState() => _SplashPageState();
 }
 
-class Home extends StatelessWidget{
+class _SplashPageState extends State<SplashPage> {
   @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
-      body: const Center(
-        child: Text('Hello world!'),
-      ),
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 2), () => _checkUser(context));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+          child: Icon(
+        Icons.stream,
+        size: 80,
+        color: Colors.blue,
+      )),
     );
+  }
+
+  void _checkUser(context) async {
+    const storage = FlutterSecureStorage();
+    if (kDebugMode) {
+      print('${await storage.readAll()}');
+    }
+    Map<String, String> allStorage = await storage.readAll();
+    String statusUser = '';
+    if (allStorage != null) {
+      allStorage.forEach((k, v) {
+        if (kDebugMode) {
+          print('k : $k, v : $v');
+        }
+        if (v == STATUS_LOGIN) statusUser = k;
+      });
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    }
+    if (statusUser != null && statusUser != '') {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MainPage(nickName: statusUser)));
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    }
   }
 }
