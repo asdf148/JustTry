@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:a_la_vez/models/join.dto.dart';
 import 'package:a_la_vez/models/reponse_join.dto.dart';
 import 'package:a_la_vez/utils/session.dart';
 import 'package:a_la_vez/utils/util.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'login_page.dart';
 import 'main_page.dart';
@@ -17,6 +21,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool isLoading = false;
+  late XFile _userFileCtrl;
   late TextEditingController _userNickNameCtrl;
   late TextEditingController _userEmailCtrl;
   late TextEditingController _userPasswordCtrl;
@@ -45,6 +50,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 flex: 3,
                 child: SizedBox(),
               ),
+              _fileWidget(),
+              const SizedBox(
+                height: 8,
+              ),
               _nickNameWidget(),
               const SizedBox(
                 height: 8,
@@ -64,6 +73,24 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _fileWidget(){
+    final ImagePicker _picker = ImagePicker();
+    // Pick an image
+    return FloatingActionButton(
+      child: const Text("select file"),
+      onPressed: ()  async {
+        print('사진추가');
+        final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+        if(image != null) {
+          _userFileCtrl = image;
+        } else {
+          // User canceled the picker
+        }
+      },
     );
   }
 
@@ -111,24 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
           primary: Colors.purple,
           padding: const EdgeInsets.all(8.0),
         ),
-        onPressed: () async {
-          if (kDebugMode) {
-            print(_userNickNameCtrl.text);
-            print(_userEmailCtrl.text);
-            print(_userPasswordCtrl.text);
-          }
-          ResponseJoinDto responseJoinDto = await Session().registerPageService.join(
-            "https://qovh.herokuapp.com/auth/join",
-            JoinDto(nick: _userNickNameCtrl.text, email: _userEmailCtrl.text, password: _userPasswordCtrl.text, rePassword: _userPasswordCtrl.text),
-            Session().JSONheaders
-          );
-          if (kDebugMode) {
-            print("------------responseJoinDto------------");
-            print(responseJoinDto);
-          }
-          if(responseJoinDto == null){
-            throw Error();
-          }
+        onPressed: () {
           isLoading ? null : _registCheck();
         },
         child: Text(
@@ -177,6 +187,35 @@ class _RegisterPageState extends State<RegisterPage> {
       print(await storage.readAll());
       print(' ');
     }
+    //--------------------------------------------
+    // api 요청해서 토큰 받기?
+    // if (kDebugMode) {
+    //   print(_userNickNameCtrl.text);
+    //   print(_userEmailCtrl.text);
+    //   print(_userPasswordCtrl.text);
+    // }
+    // ResponseJoinDto responseJoinDto = await Session().registerPageService.join(
+    //   "https://qovh.herokuapp.com/auth/join",
+    //   JoinDto(nick: _userNickNameCtrl.text, email: _userEmailCtrl.text, password: _userPasswordCtrl.text, rePassword: _userPasswordCtrl.text),
+    //   Session().JSONheaders
+    // );
+    // if (kDebugMode) {
+    //   print("------------responseJoinDto------------");
+    //   print(responseJoinDto);
+    // }
+    // if(responseJoinDto == null){
+    //   throw Error();
+    // }
+    //--------------------------------------------
+    print("------------------------요청 보냄------------------------");
+    Session().registerPageService.postFile(
+      "https://qovh.herokuapp.com/auth/join",
+      _userFileCtrl,
+      _userNickNameCtrl.text,
+      _userEmailCtrl.text,
+      _userPasswordCtrl.text
+    );
+    //--------------------------------------------
     String userNickName = _userNickNameCtrl.text;
     String userEmail = _userEmailCtrl.text;
     String userPassword = _userPasswordCtrl.text;

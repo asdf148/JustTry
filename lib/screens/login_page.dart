@@ -50,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                 flex: 3,
                 child: SizedBox(),
               ),
+              _deleteSessionButton(context),
               _registerButton(),
             ],
           ),
@@ -101,6 +102,26 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _deleteSessionButton(context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.purple,
+          padding: const EdgeInsets.all(8.0),
+        ),
+        onPressed: () => isLoading ? null : _deleteSession(),
+        child: const Text(
+          "Session 초기화",
+          style: TextStyle(
+            fontSize: 20.0,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _registerButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -122,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
       print('_userEmailCtrl.text : ${_userEmailCtrl.text}');
       print('_userPasswordCtrl.text : ${_userPasswordCtrl.text}');
     }
-    final storage = FlutterSecureStorage();
+    const storage = FlutterSecureStorage();
     String storagePass = await storage.read(key: _userEmailCtrl.text);
     if(storagePass != null && storagePass != '' && storagePass == _userPasswordCtrl.text){
       if (kDebugMode) {
@@ -140,5 +161,32 @@ class _LoginPageState extends State<LoginPage> {
       }
       showToast('아이디가 존재하지 않거나 비밀번호가 맞지않습니다.');
     }
+  }
+
+  void _deleteSession() async {
+    if (kDebugMode) {
+      print("session 초기화");
+    }
+    const storage = FlutterSecureStorage();
+
+    await storage.deleteAll();
+    // return readAll();
+    // String storagePass = await storage.read(key: _userEmailCtrl.text);
+    // if(storagePass != null && storagePass != '' && storagePass == _userPasswordCtrl.text){
+    //   if (kDebugMode) {
+    //     print('storagePass : $storagePass');
+    //   }
+    //   String userNickName = await storage.read(key: '${_userEmailCtrl.text}_$storagePass');
+    //   storage.write(key: userNickName, value: STATUS_LOGIN);
+    //   if (kDebugMode) {
+    //     print('로그인 성공');
+    //   }
+    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => MainPage(nickName: userNickName)));
+    // } else {
+    //   if (kDebugMode) {
+    //     print('로그인 실패');
+    //   }
+    //   showToast('아이디가 존재하지 않거나 비밀번호가 맞지않습니다.');
+    // }
   }
 }

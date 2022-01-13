@@ -39,7 +39,7 @@ class _SplashPageState extends State<SplashPage> {
     return const Scaffold(
       body: Center(
           child: Icon(
-        Icons.stream,
+        Icons.directions_run_sharp,
         size: 80,
         color: Colors.blue,
       )),
