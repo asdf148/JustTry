@@ -188,27 +188,7 @@ class _RegisterPageState extends State<RegisterPage> {
       print(' ');
     }
     //--------------------------------------------
-    // api 요청해서 토큰 받기?
-    // if (kDebugMode) {
-    //   print(_userNickNameCtrl.text);
-    //   print(_userEmailCtrl.text);
-    //   print(_userPasswordCtrl.text);
-    // }
-    // ResponseJoinDto responseJoinDto = await Session().registerPageService.join(
-    //   "https://qovh.herokuapp.com/auth/join",
-    //   JoinDto(nick: _userNickNameCtrl.text, email: _userEmailCtrl.text, password: _userPasswordCtrl.text, rePassword: _userPasswordCtrl.text),
-    //   Session().JSONheaders
-    // );
-    // if (kDebugMode) {
-    //   print("------------responseJoinDto------------");
-    //   print(responseJoinDto);
-    // }
-    // if(responseJoinDto == null){
-    //   throw Error();
-    // }
-    //--------------------------------------------
-    print("------------------------요청 보냄------------------------");
-    Session().registerPageService.postFile(
+    await Session().registerPageService.postFile(
       "https://qovh.herokuapp.com/auth/join",
       _userFileCtrl,
       _userNickNameCtrl.text,
