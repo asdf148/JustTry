@@ -201,12 +201,6 @@ class _RegisterPageState extends State<RegisterPage> {
       print(e);
       return;
     }
-    print("-----------------------in screen-----------------------");
-    print(responseJoinDto);
-    print(responseJoinDto.id);
-    print(responseJoinDto.nick);
-    print(responseJoinDto.email);
-    print(responseJoinDto.imagePath);
     //--------------------------------------------
     String userNickName = _userNickNameCtrl.text;
     String userEmail = _userEmailCtrl.text;
@@ -216,9 +210,9 @@ class _RegisterPageState extends State<RegisterPage> {
       if (emailCheck == null) {
         storage.write(key: userEmail, value: userPassword);
         storage.write(key: '${userEmail}_$userPassword', value: userNickName);
-        storage.write(key: userNickName, value: STATUS_LOGIN);
+        storage.write(key: '$userNickName{}$userEmail', value: STATUS_LOGIN);
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (BuildContext context) => MainPage(nickName: userNickName,)));
+            MaterialPageRoute(builder: (BuildContext context) => MainPage(nick: userNickName, email:userEmail)));
       } else {
         showToast('email이 중복됩니다.');
       }

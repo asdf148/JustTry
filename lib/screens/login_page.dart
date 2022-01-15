@@ -150,11 +150,11 @@ class _LoginPageState extends State<LoginPage> {
         print('storagePass : $storagePass');
       }
       String userNickName = await storage.read(key: '${_userEmailCtrl.text}_$storagePass');
-      storage.write(key: userNickName, value: STATUS_LOGIN);
+      storage.write(key: "$userNickName{}${_userEmailCtrl.text}", value: STATUS_LOGIN);
       if (kDebugMode) {
         print('로그인 성공');
       }
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => MainPage(nickName: userNickName)));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => MainPage(nick: userNickName, email: _userEmailCtrl.text)));
     } else {
       if (kDebugMode) {
         print('로그인 실패');

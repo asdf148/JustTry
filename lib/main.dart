@@ -53,12 +53,16 @@ class _SplashPageState extends State<SplashPage> {
     }
     Map<String, String> allStorage = await storage.readAll();
     String statusUser = '';
+    String email = '';
     if (allStorage != null) {
       allStorage.forEach((k, v) {
         if (kDebugMode) {
           print('k : $k, v : $v');
         }
-        if (v == STATUS_LOGIN) statusUser = k;
+        if (v == STATUS_LOGIN){
+          statusUser = k.split("{}")[0];
+          email = k.split("{}")[1];
+        }
       });
     } else {
       Navigator.pushReplacement(
@@ -68,7 +72,7 @@ class _SplashPageState extends State<SplashPage> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => MainPage(nickName: statusUser)));
+              builder: (context) => MainPage(nick: statusUser, email: email,)));
     } else {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
