@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class RegisterPageService {
+
+  // 안씀
   Future<ResponseJoinDto> join(String url, JoinDto data, Map<String, String> headers) async {
     http.Response response = await http.post(
       Uri.parse(url), 
@@ -18,6 +20,7 @@ class RegisterPageService {
     return ResponseJoinDto.fromJson(json.decode(response.body));
   }
 
+  //안씀
   Future<void> httpJoin(String url, XFile file, String nick, String email, String password) async {
     var request = http.MultipartRequest("POST", Uri.parse(url));
 
@@ -35,7 +38,7 @@ class RegisterPageService {
     // return ResponseJoinDto.fromJson(json.decode(response.body));
   }
   
-  postFile(String url, XFile file, String nick, String email, String password) async {
+  Future<ResponseJoinDto> postFile(String url, XFile file, String nick, String email, String password) async {
 
     FormData formData = FormData.fromMap({
       "file": await MultipartFile.fromFile(file.path),
@@ -46,6 +49,8 @@ class RegisterPageService {
     });
 
     var dio = Dio();
+
+    ResponseJoinDto responseJoinDto;
       
     try {
       var response = await dio.post(
@@ -57,10 +62,17 @@ class RegisterPageService {
       );
     
       print("응답" + response.data.toString());
+
+      responseJoinDto = ResponseJoinDto.fromJson(response.data["user"]);
+      
     } 
     catch (e) {
       print(e);
       print("error occur");
+      responseJoinDto = ResponseJoinDto.empty();
+      throw Exception(e);
     }
+
+    return responseJoinDto;
   }
 }

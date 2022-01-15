@@ -188,13 +188,25 @@ class _RegisterPageState extends State<RegisterPage> {
       print(' ');
     }
     //--------------------------------------------
-    await Session().registerPageService.postFile(
-      "https://qovh.herokuapp.com/auth/join",
-      _userFileCtrl,
-      _userNickNameCtrl.text,
-      _userEmailCtrl.text,
-      _userPasswordCtrl.text
-    );
+    ResponseJoinDto responseJoinDto = ResponseJoinDto.empty();
+    try{
+      responseJoinDto = await Session().registerPageService.postFile(
+        "https://qovh.herokuapp.com/auth/join",
+        _userFileCtrl,
+        _userNickNameCtrl.text,
+        _userEmailCtrl.text,
+        _userPasswordCtrl.text
+      );
+    }catch(e){
+      print(e);
+      return;
+    }
+    print("-----------------------in screen-----------------------");
+    print(responseJoinDto);
+    print(responseJoinDto.id);
+    print(responseJoinDto.nick);
+    print(responseJoinDto.email);
+    print(responseJoinDto.imagePath);
     //--------------------------------------------
     String userNickName = _userNickNameCtrl.text;
     String userEmail = _userEmailCtrl.text;
