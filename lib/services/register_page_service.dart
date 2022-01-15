@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:a_la_vez/models/join.dto.dart';
-import 'package:a_la_vez/models/reponse_join.dto.dart';
+import 'package:a_la_vez/models/join_dto.dart';
+import 'package:a_la_vez/models/reponse_join_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';

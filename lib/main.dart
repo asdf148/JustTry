@@ -1,3 +1,4 @@
+import 'package:a_la_vez/services/login_page_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:a_la_vez/screens/login_page.dart';
@@ -54,21 +55,27 @@ class _SplashPageState extends State<SplashPage> {
     Map<String, String> allStorage = await storage.readAll();
     String statusUser = '';
     String email = '';
+    String password = '';
     if (allStorage != null) {
       allStorage.forEach((k, v) {
         if (kDebugMode) {
           print('k : $k, v : $v');
         }
         if (v == STATUS_LOGIN){
-          statusUser = k.split("{}")[0];
-          email = k.split("{}")[1];
+          List<String> user = k.split("{<>}");
+
+          statusUser = user[0];
+          email = user[1];
+          password = user[2];
         }
       });
     } else {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
     }
-    if (statusUser != null && statusUser != '') {
+    if (statusUser != null && statusUser != "" && email != "") {
+      //로그인 api 호출
+      await LoginPageService().login("https://qovh.herokuapp.com/auth/login", email, password);
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(

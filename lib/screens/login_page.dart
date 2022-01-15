@@ -1,4 +1,5 @@
 import 'package:a_la_vez/screens/register_page.dart';
+import 'package:a_la_vez/services/login_page_service.dart';
 import 'package:a_la_vez/utils/util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -150,7 +151,9 @@ class _LoginPageState extends State<LoginPage> {
         print('storagePass : $storagePass');
       }
       String userNickName = await storage.read(key: '${_userEmailCtrl.text}_$storagePass');
-      storage.write(key: "$userNickName{}${_userEmailCtrl.text}", value: STATUS_LOGIN);
+      //로그인 api 호출
+      await LoginPageService().login("https://qovh.herokuapp.com/auth/login", _userEmailCtrl.text, _userPasswordCtrl.text);
+      storage.write(key: "$userNickName{<>}${_userEmailCtrl.text}{<>}${_userPasswordCtrl.text}", value: STATUS_LOGIN);
       if (kDebugMode) {
         print('로그인 성공');
       }

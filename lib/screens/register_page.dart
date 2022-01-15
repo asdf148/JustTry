@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:a_la_vez/models/join.dto.dart';
-import 'package:a_la_vez/models/reponse_join.dto.dart';
+import 'package:a_la_vez/models/join_dto.dart';
+import 'package:a_la_vez/models/reponse_join_dto.dart';
+import 'package:a_la_vez/services/login_page_service.dart';
 import 'package:a_la_vez/utils/session.dart';
 import 'package:a_la_vez/utils/util.dart';
 import 'package:file_picker/file_picker.dart';
@@ -210,7 +211,9 @@ class _RegisterPageState extends State<RegisterPage> {
       if (emailCheck == null) {
         storage.write(key: userEmail, value: userPassword);
         storage.write(key: '${userEmail}_$userPassword', value: userNickName);
-        storage.write(key: '$userNickName{}$userEmail', value: STATUS_LOGIN);
+        //로그인 api 호출
+      await LoginPageService().login("https://qovh.herokuapp.com/auth/login", _userEmailCtrl.text, _userPasswordCtrl.text);
+        storage.write(key: '$userNickName{<>}$userEmail{<>}$userPassword', value: STATUS_LOGIN);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (BuildContext context) => MainPage(nick: userNickName, email:userEmail)));
       } else {
