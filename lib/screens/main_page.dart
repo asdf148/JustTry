@@ -32,20 +32,20 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         title: const Text('Main Page'),
       ),
+      // 메인 화면
       body: Center(
         child: Text(
             nick == '' ? '' : 'Hello $nick'),
       ),
+      // 게시글 작성
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => null,
+        onPressed: () => _writePost(context),
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            // 프로젝트에 assets 폴더 생성 후 이미지 2개 넣기
-            // pubspec.yaml 파일에 assets 주석에 이미지 추가하기
             UserAccountsDrawerHeader(
               currentAccountPicture: const CircleAvatar(
                 // 현재 계정 이미지 set
@@ -100,6 +100,47 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
       )
+    );
+  }
+
+  Widget _writePost(BuildContext context) {
+    List<int> _personnel = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    int _selectValue = 1;
+
+    return Column(
+      children: [
+        const TextField(
+          decoration: InputDecoration(label: Text("제목")),
+          controller: null,
+        ),
+        const TextField(
+          decoration: InputDecoration(label: Text("내용")),
+          controller: null,
+        ),
+        //인원
+        DropdownButton(
+          value: _selectValue,
+          items: _personnel.map((int value) {
+            return DropdownMenuItem(
+              value: value,
+              child: Text("$value명"),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              _selectValue = value as int;
+            });
+          },
+        ),
+        const TextField(
+          decoration: InputDecoration(label: Text("마감 일자")),
+          controller: null,
+        ),
+        const TextField(
+          decoration: InputDecoration(label: Text("카테고리")),
+          controller: null,
+        ),
+      ],
     );
   }
 
