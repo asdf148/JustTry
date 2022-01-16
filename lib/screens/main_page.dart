@@ -49,7 +49,7 @@ class _MainPageState extends State<MainPage> {
             UserAccountsDrawerHeader(
               currentAccountPicture: const CircleAvatar(
                 // 현재 계정 이미지 set
-                backgroundImage: AssetImage('assets/defaul.png'),
+                backgroundImage: AssetImage('assets/default.png'),
                 backgroundColor: Colors.white,
               ),
               accountName: Text(nick),
