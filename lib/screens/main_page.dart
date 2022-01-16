@@ -18,6 +18,8 @@ class _MainPageState extends State<MainPage> {
   final storage = const FlutterSecureStorage(); // 로그아웃에 필요
   String nick;
   String email;
+  int _selectValue = 1;
+  DateTime _selectedTime = DateTime.now();
 
   _MainPageState({required this.nick, required this.email});
 
@@ -40,7 +42,19 @@ class _MainPageState extends State<MainPage> {
       // 게시글 작성
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => _writePost(context),
+        onPressed: () => showModalBottomSheet(
+          context: context,
+          builder: (context){
+            return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Container(
+                  // _writePost 안쪽의 setState가 안 먹힘
+                  child: _writePost(context),
+                );
+              }
+            );
+          }
+        ),
       ),
       drawer: Drawer(
         child: ListView(
@@ -105,7 +119,6 @@ class _MainPageState extends State<MainPage> {
 
   Widget _writePost(BuildContext context) {
     List<int> _personnel = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    int _selectValue = 1;
 
     return Column(
       children: [
@@ -128,13 +141,35 @@ class _MainPageState extends State<MainPage> {
           }).toList(),
           onChanged: (value) {
             setState(() {
+              print(_selectValue);
               _selectValue = value as int;
+              print(_selectValue);
             });
           },
         ),
-        const TextField(
-          decoration: InputDecoration(label: Text("마감 일자")),
-          controller: null,
+        ElevatedButton(
+          onPressed: () {
+            Future<DateTime?> selectedDate = showDatePicker(
+              context: context,
+              initialDate: DateTime.now(), // 초깃값
+              firstDate: DateTime(DateTime.now().year), // 시작일
+              lastDate: DateTime(DateTime.now().year + 5), // 마지막일
+            );
+
+            selectedDate.then((dateTime) {
+              setState(() {
+                if(dateTime != null){
+                  print(_selectedTime);
+                  _selectedTime = dateTime;
+                  print(_selectedTime);
+                }
+                else{
+                  throw Exception("dateTime is null");
+                }
+              });
+            });
+          },
+          child: Text(_selectedTime.toString()),
         ),
         const TextField(
           decoration: InputDecoration(label: Text("카테고리")),

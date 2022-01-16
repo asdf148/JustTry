@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:a_la_vez/screens/login_page.dart';
 import 'package:a_la_vez/screens/main_page.dart';
 import 'package:a_la_vez/utils/util.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
@@ -16,6 +17,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('en', 'US'),
+        Locale('ko', 'KO'),
+      ],
       home: SplashPage(),
     );
   }

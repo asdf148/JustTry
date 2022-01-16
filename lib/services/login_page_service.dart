@@ -21,7 +21,15 @@ class LoginPageService{
     
       print("응답" + response.data.toString());
 
-      storage.write(key: response.data.toString(), value: TOKEN);
+      Map<String, String> allStorage = await storage.readAll();
+
+      allStorage.forEach((k, v) {
+        if (v == TOKEN){
+          storage.write(key: response.data.toString(), value: TOKEN);
+        }
+      });
+
+      
       
     } 
     catch (e) {
