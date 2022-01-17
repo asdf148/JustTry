@@ -45,14 +45,7 @@ class _MainPageState extends State<MainPage> {
         onPressed: () => showModalBottomSheet(
           context: context,
           builder: (context){
-            return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return Container(
-                  // _writePost 안쪽의 setState가 안 먹힘
-                  child: _writePost(context),
-                );
-              }
-            );
+            return _writePost(context);
           }
         ),
       ),
@@ -118,7 +111,9 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _writePost(BuildContext context) {
-    List<int> _personnel = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    final _title = TextEditingController();
+    final _context = TextEditingController();
+    final _category = TextEditingController();
 
     return Column(
       children: [
@@ -131,50 +126,19 @@ class _MainPageState extends State<MainPage> {
           controller: null,
         ),
         //인원
-        DropdownButton(
-          value: _selectValue,
-          items: _personnel.map((int value) {
-            return DropdownMenuItem(
-              value: value,
-              child: Text("$value명"),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              print(_selectValue);
-              _selectValue = value as int;
-              print(_selectValue);
-            });
-          },
-        ),
-        ElevatedButton(
-          onPressed: () {
-            Future<DateTime?> selectedDate = showDatePicker(
-              context: context,
-              initialDate: DateTime.now(), // 초깃값
-              firstDate: DateTime(DateTime.now().year), // 시작일
-              lastDate: DateTime(DateTime.now().year + 5), // 마지막일
-            );
-
-            selectedDate.then((dateTime) {
-              setState(() {
-                if(dateTime != null){
-                  print(_selectedTime);
-                  _selectedTime = dateTime;
-                  print(_selectedTime);
-                }
-                else{
-                  throw Exception("dateTime is null");
-                }
-              });
-            });
-          },
-          child: Text(_selectedTime.toString()),
-        ),
+        _personnel(),
+        // 마감 날짜
+        _endDate(),
         const TextField(
           decoration: InputDecoration(label: Text("카테고리")),
           controller: null,
         ),
+        Row(
+          children: <Widget>[
+            _writePostConfirm(_title.text, _context.text, _selectValue, _selectedTime, _category.text),
+            _writePostCancel(),
+          ],
+        )
       ],
     );
   }
@@ -189,5 +153,77 @@ class _MainPageState extends State<MainPage> {
     });
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
+  }
+
+  // 인원
+  StatefulBuilder _personnel(){
+    List<int> _personnel = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setBottomSheetState) {
+        return DropdownButton(
+          value: _selectValue,
+          items: _personnel.map((int value) {
+            return DropdownMenuItem(
+              value: value,
+              child: Text("$value명"),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setBottomSheetState(() {
+              _selectValue = value as int;
+            });
+          },
+        );
+      }
+    );
+  }
+
+  // 마감일
+  StatefulBuilder _endDate(){
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setBottomSheetState){
+        return ElevatedButton(
+          onPressed: () {
+            Future<DateTime?> selectedDate = showDatePicker(
+              context: context,
+              initialDate: DateTime.now(), // 초깃값
+              firstDate: DateTime(DateTime.now().year), // 시작일
+              lastDate: DateTime(DateTime.now().year + 5), // 마지막일
+            );
+
+            selectedDate.then((dateTime) {
+              setBottomSheetState(() {
+                if(dateTime != null){
+                  _selectedTime = dateTime;
+                }
+                else{
+                  throw Exception("dateTime is null");
+                }
+              });
+            });
+          },
+          child: Text(_selectedTime.toString()),
+        );
+      }
+    );
+  }
+
+  // 모집글 작성 확인 버튼
+  TextButton _writePostConfirm(String title, String context, int personnel, DateTime endDate, String category){
+    return TextButton(
+      child: const Text("확인"),
+      onPressed: (){
+        
+      },
+    );
+  }
+
+  // 모집글 작성 취소 버튼
+  TextButton _writePostCancel(){
+    return TextButton(
+      child: const Text("취소"),
+      onPressed: () => Navigator.pop(context),
+    );
   }
 }
