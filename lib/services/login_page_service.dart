@@ -8,7 +8,6 @@ class LoginPageService{
     var dio = Dio();
 
     const storage = FlutterSecureStorage();
-    
       
     try {
       var response = await dio.post(
@@ -19,18 +18,19 @@ class LoginPageService{
         },
       );
     
-      print("응답" + response.data.toString());
-
+      print("응답 " + response.data["token"]);
       Map<String, String> allStorage = await storage.readAll();
-
-      allStorage.forEach((k, v) {
-        if (v == TOKEN){
-          storage.write(key: response.data.toString(), value: TOKEN);
-        }
+      allStorage.forEach((k, v) async {
+        print("$k : $v");
       });
 
-      
-      
+      storage.write(key: TOKEN , value: response.data["token"]);
+
+      // allStorage.forEach((k, v) {
+      //   if (v == TOKEN){
+      //     storage.write(key: response.data.toString(), value: TOKEN);
+      //   }
+      // });
     } 
     catch (e) {
       print(e);

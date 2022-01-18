@@ -1,3 +1,4 @@
+import 'package:a_la_vez/services/main_page_service.dart';
 import 'package:a_la_vez/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -117,26 +118,34 @@ class _MainPageState extends State<MainPage> {
 
     return Column(
       children: [
-        const TextField(
-          decoration: InputDecoration(label: Text("제목")),
-          controller: null,
+        TextField(
+          decoration: const InputDecoration(label: Text("제목")),
+          controller: _title,
         ),
-        const TextField(
-          decoration: InputDecoration(label: Text("내용")),
-          controller: null,
+        TextField(
+          decoration: const InputDecoration(label: Text("내용")),
+          controller: _context,
         ),
         //인원
         _personnel(),
         // 마감 날짜
         _endDate(),
-        const TextField(
-          decoration: InputDecoration(label: Text("카테고리")),
-          controller: null,
+        TextField(
+          decoration: const InputDecoration(label: Text("카테고리")),
+          controller: _category,
         ),
         Row(
           children: <Widget>[
-            _writePostConfirm(_title.text, _context.text, _selectValue, _selectedTime, _category.text),
-            _writePostCancel(),
+            TextButton(
+              child: const Text("확인"),
+              onPressed: (){
+                MainPageService().wirtePost(_title.text, _context.text, _selectValue, _selectedTime, _category.text);
+              },
+            ),
+            TextButton(
+              child: const Text("취소"),
+              onPressed: () => Navigator.pop(context),
+            )
           ],
         )
       ],
@@ -206,24 +215,6 @@ class _MainPageState extends State<MainPage> {
           child: Text(_selectedTime.toString()),
         );
       }
-    );
-  }
-
-  // 모집글 작성 확인 버튼
-  TextButton _writePostConfirm(String title, String context, int personnel, DateTime endDate, String category){
-    return TextButton(
-      child: const Text("확인"),
-      onPressed: (){
-        
-      },
-    );
-  }
-
-  // 모집글 작성 취소 버튼
-  TextButton _writePostCancel(){
-    return TextButton(
-      child: const Text("취소"),
-      onPressed: () => Navigator.pop(context),
     );
   }
 }
