@@ -1,12 +1,7 @@
-import 'dart:io';
-
-import 'package:a_la_vez/models/join_dto.dart';
 import 'package:a_la_vez/models/reponse_join_dto.dart';
 import 'package:a_la_vez/services/login_page_service.dart';
 import 'package:a_la_vez/utils/session.dart';
 import 'package:a_la_vez/utils/util.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -80,7 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _fileWidget(){
     final ImagePicker _picker = ImagePicker();
     // Pick an image
-    return FloatingActionButton(
+    return ElevatedButton(
       child: const Text("select file"),
       onPressed: ()  async {
         print('사진추가');

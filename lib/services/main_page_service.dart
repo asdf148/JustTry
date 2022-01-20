@@ -3,16 +3,26 @@ import 'package:a_la_vez/models/writing_with_user.dart';
 import 'package:a_la_vez/utils/util.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MainPageService{
 
-    Future<void> wirtePost(String title, String context, int personnel, DateTime endDate, String category) async {
+    Future<void> wirtePost(XFile file, String title, String context, int personnel, DateTime endDate, String category) async {
 
     var storage = const FlutterSecureStorage();
 
     String token = "";
 
     token = await storage.read(key: TOKEN);
+
+    Dio.FormData formData = Dio.FormData.fromMap({
+      "file": await Dio.MultipartFile.fromFile(file.path),
+      "title": title,
+      "content": context,
+      "personnel": personnel,
+      "endDate": endDate,
+      "category": category
+    });
 
     WritePostDto writePostDto = WritePostDto(
       title: title, 
@@ -29,7 +39,7 @@ class MainPageService{
 
       var response = await dio.post(
         "https://qovh.herokuapp.com/post/write",
-        data: writePostDto.toJson(),
+        data: formData,
         options: Dio.Options(
           headers: {
             "authorization" : "Bearer $token",
@@ -42,6 +52,7 @@ class MainPageService{
     
       print("응답" + response.data.toString());
 
+      // flutter: Invalid argument(s) (input): Must not be null
       writing = WritingWithUser.fromJson(response.data);
       
     } 

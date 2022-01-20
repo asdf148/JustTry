@@ -3,8 +3,9 @@ class User {
   final String name;
   final String email;
   final String password;
+  final String imagePath;
   
-  User({required this.userId, required this.name, required this.email, required this.password});
+  User({required this.userId, required this.name, required this.email, required this.password, required this.imagePath});
   
   factory User.fromJson(Map<String, dynamic> map) {
     return User(
@@ -12,6 +13,7 @@ class User {
         name: map['name'],
         email: map['email'],
         password: map['password'],
+        imagePath: map['imagePath'],
     );
   }
 }

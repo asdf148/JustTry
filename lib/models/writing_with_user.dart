@@ -30,46 +30,55 @@ class WritingWithUser {
   });
 
   factory WritingWithUser.fromJson(Map<String, dynamic> map) {
-    if(map["imagePath"] == null ){
-      return WritingWithUser(
-        id: map["id"],
-        imagePath: "",
-        title: map["title"],
-        content: map["content"],
-        personnel: map["personnel"],
-        createdAt: DateTime.parse(map["createdAt"]),
-        updatedAt: DateTime.parse(map["updatedAt"]),
-        period: map["period"],
-        category: map["category"],
-        userId: map['userId'],
-        user: User.fromJson(map['user']),
-      );
-    }
+    // if(map["imagePath"] == null ){
+    //   return WritingWithUser(
+    //     id: map["id"],
+    //     imagePath: "",
+    //     title: map["title"],
+    //     content: map["content"],
+    //     personnel: map["personnel"],
+    //     createdAt: DateTime.parse(map["createdAt"]),
+    //     updatedAt: DateTime.parse(map["updatedAt"]),
+    //     period: map["period"],
+    //     category: map["category"],
+    //     userId: map['userId'],
+    //     user: User.fromJson(map['user']),
+    //   );
+    // }
     return WritingWithUser(
-        id: map["id"],
-        imagePath: map["imagePath"],
-        title: map["title"],
-        content: map["content"],
-        personnel: map["personnel"],
-        createdAt: DateTime.parse(map["createdAt"]),
-        updatedAt: DateTime.parse(map["updatedAt"]),
-        period: map["period"],
-        category: map["category"],
-        userId: map['userId'],
-        user: User.fromJson(map['user']),
-      );
+      id: map["id"],
+      imagePath: map["imagePath"],
+      title: map["title"],
+      content: map["content"],
+      personnel: map["personnel"],
+      createdAt: DateTime.parse(map["createdAt"]),
+      updatedAt: DateTime.parse(map["updatedAt"]),
+      period: map["period"],
+      category: map["category"],
+      userId: map['userId'],
+      user: User.fromJson(map['user']),
+    );
   }
-
-  // {
-  //   "id": 0,
-  //   "imagePath": "string",
-  //   "title": "string",
-  //   "content": "string",
-  //   "personnel": 0,
-  //   "createdAt": "2022-01-17T14:33:37.250Z",
-  //   "updatedAt": "2022-01-17T14:33:37.250Z",
-  //   "period": "string",
-  //   "category": "string",
-  //   "userId": 0
-  // }
 }
+/*
+{
+  writing: {
+    title: asdf,
+    content: zxcv,
+    personnel: 8,
+    category: all,
+    user: {
+      id: 135,
+      nick: qwer,
+      email: qwer@qwer.com,
+      password:$2b$12$xZBhb2EP6kKFVPG7y7doVeWaAeApmhjIeFi8rKrsqBCXkIVpLY62G,
+      imagePath: 1642342700934__image_picker_CDAFD180-0395-420E-BAA8-D9CA5A4929F6-12604-0000002A033257B9.jpg
+    }, 
+    userId: 135,
+    imagePath: null, 
+    id: 495,
+    createdAt: 2022-01-20T03:37:45.189Z,
+    updatedAt: 2022-01-20T03:37:45.189Z
+  }
+}
+*/

@@ -2,6 +2,7 @@ import 'package:a_la_vez/services/main_page_service.dart';
 import 'package:a_la_vez/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'login_page.dart';
 
@@ -17,6 +18,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final storage = const FlutterSecureStorage(); // 로그아웃에 필요
+  XFile file = XFile("/assets/default.png");
   String nick;
   String email;
   int _selectValue = 1;
@@ -118,6 +120,7 @@ class _MainPageState extends State<MainPage> {
 
     return Column(
       children: [
+        _fileWidget(),
         TextField(
           decoration: const InputDecoration(label: Text("제목")),
           controller: _title,
@@ -139,7 +142,7 @@ class _MainPageState extends State<MainPage> {
             TextButton(
               child: const Text("확인"),
               onPressed: (){
-                MainPageService().wirtePost(_title.text, _context.text, _selectValue, _selectedTime, _category.text);
+                MainPageService().wirtePost(file, _title.text, _context.text, _selectValue, _selectedTime, _category.text);
               },
             ),
             TextButton(
@@ -162,6 +165,32 @@ class _MainPageState extends State<MainPage> {
     });
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) => LoginPage()));
+  }
+  // 이미지 선택
+  Widget _fileWidget(){
+    final ImagePicker _picker = ImagePicker();
+    XFile? image = null;
+    // Pick an image
+    return ElevatedButton(
+      child: const Text("select file"),
+      onPressed: ()  async {
+        print('사진추가');
+        try{
+          image = await _picker.pickImage(source: ImageSource.gallery);
+          print(image);
+        }
+        catch(e){
+          print("select image error");
+          print(e);
+        }
+
+        if(image != null) {
+          file = image!;
+        } else {
+          // User canceled the picker
+        }
+      },
+    );
   }
 
   // 인원
