@@ -45,13 +45,18 @@ class _MainPageState extends State<MainPage> {
       // 게시글 작성
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => showModalBottomSheet(
-          context: context,
-          builder: (context){
-            return _writePost(context);
-          }
-        ),
+        onPressed: () {
+          _selectValue = 1;
+          _selectedTime = DateTime.now();
+          showModalBottomSheet(
+            context: context,
+            builder: (context){
+              return _writePost(context);
+            }
+          );
+        },
       ),
+      // 왼쪽 계정? 버튼
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -113,6 +118,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
+  // 게시글 작성 위젯
   Widget _writePost(BuildContext context) {
     final _title = TextEditingController();
     final _context = TextEditingController();
@@ -120,11 +126,14 @@ class _MainPageState extends State<MainPage> {
 
     return Column(
       children: [
+        // 이미지 선택
         _fileWidget(),
+        // 게시글 제목
         TextField(
           decoration: const InputDecoration(label: Text("제목")),
           controller: _title,
         ),
+        // 게시글 내용
         TextField(
           decoration: const InputDecoration(label: Text("내용")),
           controller: _context,
@@ -137,17 +146,24 @@ class _MainPageState extends State<MainPage> {
           decoration: const InputDecoration(label: Text("카테고리")),
           controller: _category,
         ),
+        // 확인, 취소 버튼
         Row(
           children: <Widget>[
             TextButton(
               child: const Text("확인"),
               onPressed: (){
+                _selectValue = 1;
+                _selectedTime = DateTime.now();
                 MainPageService().wirtePost(file, _title.text, _context.text, _selectValue, _selectedTime, _category.text);
               },
             ),
             TextButton(
               child: const Text("취소"),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                _selectValue = 1;
+                _selectedTime = DateTime.now();
+                Navigator.pop(context);
+              }
             )
           ],
         )
