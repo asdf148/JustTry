@@ -177,6 +177,7 @@ class _MainPageState extends State<MainPage> {
         print('사진추가');
         try{
           image = await _picker.pickImage(source: ImageSource.gallery);
+          //flutter: PlatformException(multiple_request, Cancelled by a second request, null, null) 
           print(image);
         }
         catch(e){

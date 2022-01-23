@@ -52,8 +52,7 @@ class MainPageService{
     
       print("응답" + response.data.toString());
 
-      // flutter: Invalid argument(s) (input): Must not be null
-      writing = WritingWithUser.fromJson(response.data);
+    writing = WritingWithUser.fromJson(response.data["writing"]);
       
     } 
     catch (e) {
